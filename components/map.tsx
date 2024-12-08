@@ -5,31 +5,18 @@ import MarkerIcon from "../node_modules/leaflet/dist/images/marker-icon.png";
 import MarkerShadow from "../node_modules/leaflet/dist/images/marker-shadow.png";
 import "leaflet/dist/leaflet.css";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import PopupDetails from "./popup-details";
 
-const Map = () => {
+interface MapProps {
+  markers: Array<{ latitude: number; longitude: number; address: string; id: string }>;
+}
+
+const Map = ({ markers }: MapProps) => {
   const [coord, setCoord] = useState([51.1, 17.0333]);
-  const [markers, setMarkers] = useState([]);
   const [activePopup, setActivePopup] = useState<L.Popup | null>(null);
 
-  // Fetch marker data from the API endpoint
-  useEffect(() => {
-    const fetchMarkers = async () => {
-      try {
-        const response = await fetch("/api/frontend/parcel_machines");
-        const data = await response.json();
-        setMarkers(data);
-      } catch (error) {
-        console.error("Error fetching marker data:", error);
-      }
-    };
-
-    fetchMarkers();
-  }, []);
-
   const handleMouseOver = (e: any) => {
-    // Open the popup on hover
     if (activePopup !== e.target.getPopup()) {
       e.target.openPopup();
       setActivePopup(e.target.getPopup());
@@ -37,7 +24,6 @@ const Map = () => {
   };
 
   const handleMouseOut = (e: any) => {
-    // Close the popup only if the mouse leaves the popup (not the marker)
     if (activePopup === e.target.getPopup()) {
       setActivePopup(null);
     }
@@ -60,8 +46,7 @@ const Map = () => {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
 
-        {/* Map over the markers array and create Marker components */}
-        {markers.map((marker: any, index) => (
+        {markers.map((marker, index) => (
           <Marker
             key={index}
             icon={
