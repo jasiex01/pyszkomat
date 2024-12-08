@@ -81,35 +81,6 @@ export default function RestaurantCard({
     return stars;
   };
 
-  switch (foodType) {
-    case "ASIAN":
-      foodType = "Azjatycka";
-      break;
-    case "BBQ":
-      foodType = "Grill";
-      break;
-    case "BAKERY":
-      foodType = "Piekarnia";
-      break;
-    case "FAST_FOOD":
-      foodType = "Fast food";
-      break;
-    case "ITALIAN":
-      foodType = "Włoska";
-      break;
-    case "KEBAB":
-      foodType = "Kebab";
-      break;
-    case "MEXICAN":
-      foodType = "Meksykańska";
-      break;
-    case "SEAFOOD":
-      foodType = "Owoce morza";
-      break;
-    default:
-      foodType = "Nieznany";
-  }
-
   return (
     <Card border="light" bg="dark" text="light">
       <Card.Header
@@ -148,7 +119,7 @@ export default function RestaurantCard({
             href={`/restaurant-details?id=${id}&restaurantId=${restaurantId}`}
             className="text-light border-light"
           >
-            Zamów
+            Wybierz
           </Button>
         </div>
       </Card.Body>

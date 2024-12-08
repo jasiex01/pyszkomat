@@ -7,6 +7,7 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 import { useSearchParams } from "next/navigation";
+import { Spinner } from 'react-bootstrap';
 
 function convertToDate(dateString: string): number {
   const date = new Date(dateString);
@@ -83,7 +84,12 @@ export default function Page() {
   };
 
   if (remainingTime === 0) {
-    return <div>Loading...</div>;
+    return (
+      <div className="d-flex justify-content-center align-items-center" style={{ minHeight: "100vh" }}>
+        <Spinner animation="border" role="status" />
+        <span className="sr-only">Loading...</span>
+      </div>
+    );
   }
 
   return (

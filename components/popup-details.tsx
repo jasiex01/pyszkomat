@@ -16,7 +16,7 @@ export default function PopupDetails({
       <div className="d-grid gap-2">
         <Link href={`/restaurants?id=${id}`} passHref>
           <Button variant="dark" size="lg" className="text-light">
-            Zamów
+            Wybierz
           </Button>
         </Link>
       </div>
