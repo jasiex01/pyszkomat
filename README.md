@@ -25,11 +25,11 @@ Zamówienie:
 1. Strona podsumowania - ok
 2. Jakaś fake płatność (wybór metody płatności) - ok
 
-Anulowanie zamówienia = priorytet -2 - probably never in progress
-Strona ładowania - ok
+Reszta:
+1. Anulowanie zamówienia = priorytet -2 - probably never in progress
+2. Strona ładowania - ok
+3. Link do wideo jako pomoc dla użytkownika - ok
 
-dla co najmniej dwóch funkcjonalności przygotuj dwie alternatywne wersje interfejsu:
-1: Moje zamówienia i Historia osobno / Moje zamówienia i Historia w jednej podstronie - in progress
-2: Wyszukiwanie pyszkomatów na mapie, w sensie filtrowanie przy wpisywaniu w wyszukiwarkę - in progress
-
-Link do wideo - jako pomoc dla użytkownika - ok
+Dla co najmniej dwóch funkcjonalności przygotuj dwie alternatywne wersje interfejsu:
+1. Moje zamówienia i Historia osobno / Moje zamówienia i Historia w jednej podstronie - in progress
+2. Wyszukiwanie pyszkomatów na mapie, w sensie filtrowanie przy wpisywaniu w wyszukiwarkę - in progress
