@@ -10,6 +10,7 @@ export default function SearchBar() {
 
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault(); // Prevent the form from causing a page reload.
+    if (searchTerm.trim() === "") return; // Prevent empty submissions.
     router.push(`/search-results?address=${encodeURIComponent(searchTerm)}`);
   };
 
@@ -26,12 +27,13 @@ export default function SearchBar() {
             type="text"
             placeholder="Search"
             aria-label="Search"
+            value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
           <InputGroup.Text
             className="bg-transparent border-0"
             style={{ cursor: "pointer" }}
-            onClick={handleSubmit} // No need to handle click here as the form handles it.
+            onClick={handleSubmit}
           >
             <FaSearch />
           </InputGroup.Text>

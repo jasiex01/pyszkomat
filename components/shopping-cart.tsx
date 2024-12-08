@@ -44,39 +44,32 @@ const ShoppingCart: React.FC<ShoppingCartProps> = ({
     );
   };
 
-  const handleOrder = async () => {
-    try {
-      const orderItems = cartItems.map((item: any) => ({
-        menuItemId: item.id,
-        quantity: item.quantity,
-      }));
+  const handleOrder = () => {
+    // Prepare the order details to be passed as query parameters
+    const orderDetails = {
+      cartItems,
+      totalPrice: getTotalPrice(),
+    };
+  
+    // Serialize the order details to JSON
+    const orderDetailsJson = JSON.stringify(orderDetails);
 
-      const order = {
-        parcelMachineId,
-        customerId: 1,
-        orderItems,
-      };
+    // match backend api
+    const orderItems = cartItems.map((item: any) => ({
+      menuItemId: item.id,
+      quantity: item.quantity,
+    }));
+    const orderData = {
+      parcelMachineId,
+      customerId: 1,
+      orderItems,
+    };
+    const order = JSON.stringify(orderData);
 
-      const response = await fetch(`/api/frontend/orders`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(order),
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to place order");
-      }
-
-      const data = await response.json();
-      console.log("Order placed successfully:", data);
-      // Navigate to the order details page or show a success message
-      router.push(`/order-details?orderId=${data.id}`);
-    } catch (error) {
-      console.error("Error placing order:", error);
-    }
-  };
+    // Use router.push to navigate to the order-summary page and pass the query
+    router.push(`/order-summary?orderDetails=${orderDetailsJson}&order=${order}`);
+  }; 
+  
 
   return (
     <div className="mt-3">

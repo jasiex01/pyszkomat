@@ -1,8 +1,17 @@
+import { usePathname } from "next/navigation";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 
 function Banner() {
+  const pathname = usePathname(); // Get the current pathname
+
+  const navLinks = [
+    { href: "/", label: "Strona główna" },
+    { href: "/orders", label: "Moje zamówienia" },
+    { href: "/order-history", label: "Historia zamówień" },
+  ];
+
   return (
     <Navbar
       expand="lg"
@@ -15,15 +24,15 @@ function Banner() {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="justify-content-end flex-grow-1">
-            <Nav.Link href="/" className="active">
-              Strona główna
-            </Nav.Link>
-            <Nav.Link href="/orders" className="active">
-              Moje zamówienia
-            </Nav.Link>
-            <Nav.Link href="/order-history" className="active">
-              Historia zamówień
-            </Nav.Link>
+            {navLinks.map((link) => (
+              <Nav.Link
+                key={link.href}
+                href={link.href}
+                className={pathname === link.href ? "active" : ""}
+              >
+                {link.label}
+              </Nav.Link>
+            ))}
           </Nav>
         </Navbar.Collapse>
       </Container>

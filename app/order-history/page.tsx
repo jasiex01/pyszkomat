@@ -2,6 +2,7 @@
 import Banner from "@/components/banner";
 import OrderCard from "@/components/myorders-card";
 import React, { useEffect, useState } from "react";
+import { Spinner } from 'react-bootstrap';
 
 export default function Page() {
   const [orders, setOrders] = useState([]);
@@ -35,7 +36,12 @@ export default function Page() {
   }, [customerId]);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="d-flex justify-content-center align-items-center" style={{ minHeight: "100vh" }}>
+        <Spinner animation="border" role="status" />
+        <span className="sr-only">Loading...</span>
+      </div>
+    );
   }
 
   return (

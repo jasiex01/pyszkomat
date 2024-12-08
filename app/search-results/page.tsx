@@ -4,6 +4,7 @@ import { useSearchParams } from "next/navigation";
 import { useState, useEffect } from "react";
 import { Button, Card } from "react-bootstrap";
 import { FaStar } from "react-icons/fa";
+import { Spinner } from 'react-bootstrap';
 
 const SearchResults: React.FC = () => {
   const [sortedMachines, setSortedMachines] = useState<any[]>([]);
@@ -32,19 +33,22 @@ const SearchResults: React.FC = () => {
 
         const favoriteIds = new Set(favoritesData.map((fav: any) => fav.id));
 
+        // Filter the machines based on the search term (address)
+        const filteredMachines = data.filter((machine: any) =>
+          machine.address.toLowerCase().includes(address?.toLowerCase() || "")
+        );
+
         // Combine and sort the machines
-        const sortedMachines = data.map((machine: any) => ({
+        const sortedMachines = filteredMachines.map((machine: any) => ({
           ...machine,
           isFavorite: favoriteIds.has(machine.id),
         }));
 
-        sortedMachines.sort(
-          (a: { isFavorite: any }, b: { isFavorite: any }) => {
-            if (a.isFavorite && !b.isFavorite) return -1;
-            if (!a.isFavorite && b.isFavorite) return 1;
-            return 0;
-          }
-        );
+        sortedMachines.sort((a: { isFavorite: any }, b: { isFavorite: any }) => {
+          if (a.isFavorite && !b.isFavorite) return -1;
+          if (!a.isFavorite && b.isFavorite) return 1;
+          return 0;
+        });
 
         setSortedMachines(sortedMachines);
       } catch (error) {
@@ -55,7 +59,7 @@ const SearchResults: React.FC = () => {
     };
 
     fetchMachines();
-  }, []);
+  }, [address]); // Re-run when the `address` query parameter changes
 
   const toggleFavorite = async (id: string) => {
     try {
@@ -87,57 +91,71 @@ const SearchResults: React.FC = () => {
   };
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="d-flex justify-content-center align-items-center" style={{ minHeight: "100vh" }}>
+        <Spinner animation="border" role="status" />
+        <span className="sr-only">Loading...</span>
+      </div>
+    );
   }
 
   return (
     <main>
       <Banner />
       <section className="pt-5">
-        <div className="row row-cols-1 g-4">
-          {sortedMachines.map((machine: any) => (
-            <div className="col" key={machine.id}>
-              <Card border="light" bg="dark" text="light">
-                <Card.Header
-                  as="h2"
-                  className="d-flex justify-content-between align-items-center"
-                >
-                  {machine.id}
-                  <FaStar
-                    onClick={() => toggleFavorite(machine.id)}
-                    color={machine.isFavorite ? "gold" : "gray"}
-                    size={24}
-                    style={{ cursor: "pointer" }}
-                    title={
-                      machine.isFavorite
-                        ? "Remove from favorites"
-                        : "Add to favorites"
-                    }
-                  />
-                </Card.Header>
-                <Card.Body>
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      alignItems: "center",
-                    }}
+        {sortedMachines.length === 0 ? (
+          <div className="text-center">
+            <h3>Nie znaleziono podanej ulicy: "{address}"</h3>
+            <Button variant="secondary" href="/" className="mt-3">
+              Powrót na stronę główną
+            </Button>
+          </div>
+        ) : (
+          <div className="row row-cols-1 g-4">
+            {sortedMachines.map((machine: any) => (
+              <div className="col" key={machine.id}>
+                <Card border="light" bg="dark" text="light">
+                  <Card.Header
+                    as="h2"
+                    className="d-flex justify-content-between align-items-center"
                   >
-                    <Card.Text>{machine.address}</Card.Text>
-                    <Button
-                      variant="dark"
-                      size="lg"
-                      href={`/restaurants?id=${machine.id}`}
-                      className="text-light border-light"
+                    {machine.id}
+                    <FaStar
+                      onClick={() => toggleFavorite(machine.id)}
+                      color={machine.isFavorite ? "gold" : "gray"}
+                      size={24}
+                      style={{ cursor: "pointer" }}
+                      title={
+                        machine.isFavorite
+                          ? "Remove from favorites"
+                          : "Add to favorites"
+                      }
+                    />
+                  </Card.Header>
+                  <Card.Body>
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                      }}
                     >
-                      Wybierz
-                    </Button>
-                  </div>
-                </Card.Body>
-              </Card>
-            </div>
-          ))}
-        </div>
+                      <Card.Text>{machine.address}</Card.Text>
+                      <Button
+                        variant="dark"
+                        size="lg"
+                        href={`/restaurants?id=${machine.id}`}
+                        className="text-light border-light"
+                      >
+                        Wybierz
+                      </Button>
+                    </div>
+                  </Card.Body>
+                </Card>
+              </div>
+            ))}
+          </div>
+        )}
       </section>
     </main>
   );

@@ -11,6 +11,7 @@ import PopupDetails from "./popup-details";
 const Map = () => {
   const [coord, setCoord] = useState([51.1, 17.0333]);
   const [markers, setMarkers] = useState([]);
+  const [activePopup, setActivePopup] = useState<L.Popup | null>(null);
 
   // Fetch marker data from the API endpoint
   useEffect(() => {
@@ -26,6 +27,21 @@ const Map = () => {
 
     fetchMarkers();
   }, []);
+
+  const handleMouseOver = (e: any) => {
+    // Open the popup on hover
+    if (activePopup !== e.target.getPopup()) {
+      e.target.openPopup();
+      setActivePopup(e.target.getPopup());
+    }
+  };
+
+  const handleMouseOut = (e: any) => {
+    // Close the popup only if the mouse leaves the popup (not the marker)
+    if (activePopup === e.target.getPopup()) {
+      setActivePopup(null);
+    }
+  };
 
   return (
     <div>
@@ -60,6 +76,10 @@ const Map = () => {
               })
             }
             position={[marker.latitude, marker.longitude]}
+            eventHandlers={{
+              mouseover: handleMouseOver,
+              mouseout: handleMouseOut,
+            }}
           >
             <Popup>
               <PopupDetails address={marker.address} id={marker.id} />
