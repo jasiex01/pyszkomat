@@ -8,6 +8,8 @@ import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import { useState, useEffect } from "react";
 import PopupDetails from "./popup-details";
 
+const customerId = 1;
+
 const Map = () => {
   const [coord, setCoord] = useState([51.1, 17.0333]);
   const [markers, setMarkers] = useState([]);
@@ -19,7 +21,23 @@ const Map = () => {
       try {
         const response = await fetch("/api/frontend/parcel_machines");
         const data = await response.json();
-        setMarkers(data);
+
+        const favoritesResponse = await fetch(
+          `http://localhost:8080/api/frontend/favourite/parcel_machines/${customerId}`
+        );
+        if (!favoritesResponse.ok) {
+          throw new Error("Failed to fetch favorites");
+        }
+
+        const favoritesData = await favoritesResponse.json();
+        const favoriteIds = new Set(favoritesData.map((fav: any) => fav.id));
+
+        const sortedMachines = data.map((machine: any) => ({
+          ...machine,
+          isFavorite: favoriteIds.has(machine.id),
+        }));
+
+        setMarkers(sortedMachines);
       } catch (error) {
         console.error("Error fetching marker data:", error);
       }
@@ -82,7 +100,11 @@ const Map = () => {
             }}
           >
             <Popup>
-              <PopupDetails address={marker.address} id={marker.id} />
+              <PopupDetails
+                address={marker.address}
+                id={marker.id}
+                isFavorite={marker.isFavorite}
+              />
             </Popup>
           </Marker>
         ))}
