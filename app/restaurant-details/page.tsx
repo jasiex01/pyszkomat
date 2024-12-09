@@ -9,8 +9,13 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import { useSearchParams } from "next/navigation";
 import Stepper from "@/components/stepper";
-import { InputGroup, FormControl, Dropdown, DropdownButton } from "react-bootstrap";
-import { Spinner } from 'react-bootstrap';
+import {
+  InputGroup,
+  FormControl,
+  Dropdown,
+  DropdownButton,
+} from "react-bootstrap";
+import { Spinner } from "react-bootstrap";
 
 // Category mappings from backend to Polish
 const categoryTranslations: { [key: string]: string } = {
@@ -42,7 +47,12 @@ export default function Page() {
 
   // Steps definition
   const currentStep = 2; // Set this to the current step index (1-based)
-  const steps = ["Wybór pyszkomatu", "Wybór restauracji", "Wybór dań", "Podsumowanie"];
+  const steps = [
+    "Wybór pyszkomatu",
+    "Wybór restauracji",
+    "Wybór dań",
+    "Podsumowanie",
+  ];
 
   useEffect(() => {
     const fetchMenuItems = async () => {
@@ -89,7 +99,10 @@ export default function Page() {
 
   if (loading) {
     return (
-      <div className="d-flex justify-content-center align-items-center" style={{ minHeight: "100vh" }}>
+      <div
+        className="d-flex justify-content-center align-items-center"
+        style={{ minHeight: "100vh" }}
+      >
         <Spinner animation="border" role="status" />
         <span className="sr-only">Loading...</span>
       </div>
@@ -154,7 +167,9 @@ export default function Page() {
           {/* Category Filter */}
           <DropdownButton
             id="categoryFilter"
-            title={`Filtruj: ${categoryTranslations[selectedCategory] || "Wszystkie"}`}
+            title={`Filtruj: ${
+              categoryTranslations[selectedCategory] || "Wszystkie"
+            }`}
             onSelect={(category) => handleCategoryChange(category ?? "ALL")}
             variant="secondary"
           >
@@ -173,8 +188,12 @@ export default function Page() {
             variant="secondary"
           >
             <Dropdown.Item eventKey="Nazwa">Nazwa</Dropdown.Item>
-            <Dropdown.Item eventKey="Cena (rosnąco)">Cena (rosnąco)</Dropdown.Item>
-            <Dropdown.Item eventKey="Cena (malejąco)">Cena (malejąco)</Dropdown.Item>
+            <Dropdown.Item eventKey="Cena (rosnąco)">
+              Cena (rosnąco)
+            </Dropdown.Item>
+            <Dropdown.Item eventKey="Cena (malejąco)">
+              Cena (malejąco)
+            </Dropdown.Item>
           </DropdownButton>
         </div>
 
@@ -182,7 +201,15 @@ export default function Page() {
           <Col>
             <RestaurantMenu menuItems={sortedMenuItems} addToCart={addToCart} />
           </Col>
-          <Col md={2}>
+          <Col
+            md={2}
+            style={{
+              position: "sticky",
+              top: "0",
+              height: "100vh",
+              overflowY: "auto",
+            }}
+          >
             <ShoppingCart
               cartItems={cartItems}
               setCartItems={setCartItems}
