@@ -3,8 +3,8 @@ import Banner from "@/components/banner";
 import { useSearchParams } from "next/navigation";
 import { useState, useEffect } from "react";
 import { Button, Card } from "react-bootstrap";
-import { FaStar } from "react-icons/fa";
-import { Spinner } from 'react-bootstrap';
+import { FaHeart } from "react-icons/fa";
+import { Spinner } from "react-bootstrap";
 
 const SearchResults: React.FC = () => {
   const [sortedMachines, setSortedMachines] = useState<any[]>([]);
@@ -44,11 +44,13 @@ const SearchResults: React.FC = () => {
           isFavorite: favoriteIds.has(machine.id),
         }));
 
-        sortedMachines.sort((a: { isFavorite: any }, b: { isFavorite: any }) => {
-          if (a.isFavorite && !b.isFavorite) return -1;
-          if (!a.isFavorite && b.isFavorite) return 1;
-          return 0;
-        });
+        sortedMachines.sort(
+          (a: { isFavorite: any }, b: { isFavorite: any }) => {
+            if (a.isFavorite && !b.isFavorite) return -1;
+            if (!a.isFavorite && b.isFavorite) return 1;
+            return 0;
+          }
+        );
 
         setSortedMachines(sortedMachines);
       } catch (error) {
@@ -92,7 +94,10 @@ const SearchResults: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="d-flex justify-content-center align-items-center" style={{ minHeight: "100vh" }}>
+      <div
+        className="d-flex justify-content-center align-items-center"
+        style={{ minHeight: "100vh" }}
+      >
         <Spinner animation="border" role="status" />
         <span className="sr-only">Loading...</span>
       </div>
@@ -120,9 +125,9 @@ const SearchResults: React.FC = () => {
                     className="d-flex justify-content-between align-items-center"
                   >
                     {machine.id}
-                    <FaStar
+                    <FaHeart
                       onClick={() => toggleFavorite(machine.id)}
-                      color={machine.isFavorite ? "gold" : "gray"}
+                      color={machine.isFavorite ? "red" : "gray"}
                       size={24}
                       style={{ cursor: "pointer" }}
                       title={

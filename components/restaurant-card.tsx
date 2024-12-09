@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
-import { FaStar } from "react-icons/fa";
+import { FaHeart, FaStar } from "react-icons/fa";
 
 export default function RestaurantCard({
   name,
@@ -88,9 +88,9 @@ export default function RestaurantCard({
         className="d-flex justify-content-between align-items-center"
       >
         {name}
-        <FaStar
+        <FaHeart
           onClick={toggleFavorite}
-          color={isFavorite ? "gold" : "gray"}
+          color={isFavorite ? "red" : "gray"}
           size={24}
           style={{ cursor: "pointer" }}
           title={isFavorite ? "Remove from favorites" : "Add to favorites"}
