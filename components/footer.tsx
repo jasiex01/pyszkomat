@@ -3,7 +3,7 @@ import { FaQuestionCircle } from 'react-icons/fa'; // Import the help icon
 
 export default function Footer() {
   const redirectToTutorial = () => {
-    window.open("https://www.youtube.com/watch?v=5v01LWe6ehw", "_blank");
+    window.open("https://youtu.be/302C0nnoIlA", "_blank");
   };
 
   return (
