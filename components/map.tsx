@@ -36,6 +36,8 @@ const Map = ({ markers }: MapProps) => {
           height: "80vh",
           width: "95vw",
           margin: "auto",
+          position: "relative", // Ensure stacking context
+          zIndex: 1, // Lower z-index for the map
         }}
         center={[coord[0], coord[1]]}
         zoom={13}
