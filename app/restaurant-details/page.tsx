@@ -157,7 +157,7 @@ export default function Page() {
           {/* Search Input */}
           <InputGroup className="w-50">
             <FormControl
-              placeholder="Szukaj dania"
+              placeholder="Wpisz nazwę dania"
               value={searchQuery}
               onChange={handleSearchChange}
               className="bg-light text-dark"

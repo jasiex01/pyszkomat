@@ -5,49 +5,18 @@ import MarkerIcon from "../node_modules/leaflet/dist/images/marker-icon.png";
 import MarkerShadow from "../node_modules/leaflet/dist/images/marker-shadow.png";
 import "leaflet/dist/leaflet.css";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import PopupDetails from "./popup-details";
 
-const customerId = 1;
+interface MapProps {
+  markers: Array<{ latitude: number; longitude: number; address: string; id: string }>;
+}
 
-const Map = () => {
+const Map = ({ markers }: MapProps) => {
   const [coord, setCoord] = useState([51.1, 17.0333]);
-  const [markers, setMarkers] = useState([]);
   const [activePopup, setActivePopup] = useState<L.Popup | null>(null);
 
-  // Fetch marker data from the API endpoint
-  useEffect(() => {
-    const fetchMarkers = async () => {
-      try {
-        const response = await fetch("/api/frontend/parcel_machines");
-        const data = await response.json();
-
-        const favoritesResponse = await fetch(
-          `http://localhost:8080/api/frontend/favourite/parcel_machines/${customerId}`
-        );
-        if (!favoritesResponse.ok) {
-          throw new Error("Failed to fetch favorites");
-        }
-
-        const favoritesData = await favoritesResponse.json();
-        const favoriteIds = new Set(favoritesData.map((fav: any) => fav.id));
-
-        const sortedMachines = data.map((machine: any) => ({
-          ...machine,
-          isFavorite: favoriteIds.has(machine.id),
-        }));
-
-        setMarkers(sortedMachines);
-      } catch (error) {
-        console.error("Error fetching marker data:", error);
-      }
-    };
-
-    fetchMarkers();
-  }, []);
-
   const handleMouseOver = (e: any) => {
-    // Open the popup on hover
     if (activePopup !== e.target.getPopup()) {
       e.target.openPopup();
       setActivePopup(e.target.getPopup());
@@ -55,7 +24,6 @@ const Map = () => {
   };
 
   const handleMouseOut = (e: any) => {
-    // Close the popup only if the mouse leaves the popup (not the marker)
     if (activePopup === e.target.getPopup()) {
       setActivePopup(null);
     }
@@ -68,6 +36,8 @@ const Map = () => {
           height: "80vh",
           width: "95vw",
           margin: "auto",
+          position: "relative", // Ensure stacking context
+          zIndex: 1, // Lower z-index for the map
         }}
         center={[coord[0], coord[1]]}
         zoom={13}
@@ -78,8 +48,7 @@ const Map = () => {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
 
-        {/* Map over the markers array and create Marker components */}
-        {markers.map((marker: any, index) => (
+        {markers.map((marker, index) => (
           <Marker
             key={index}
             icon={
