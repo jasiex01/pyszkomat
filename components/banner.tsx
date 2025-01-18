@@ -8,8 +8,7 @@ function Banner() {
 
   const navLinks = [
     { href: "/", label: "Strona główna" },
-    { href: "/orders", label: "Moje zamówienia" },
-    { href: "/order-history", label: "Historia zamówień" },
+    { href: "/orders", label: "Zamówienia" },
   ];
 
   return (
